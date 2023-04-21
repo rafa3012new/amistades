@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block titulo %}Amistades{% endblock %}
+{% block contenido1%}Aplicacion de Amistades{%endblock%}
+{% block contenido2 %}
+   <div class = cuerpo>
+    <div class="columna1 pt-2">
+        <div><h2>Amistades</h2></div>
+        <div class="contenedor_tabla">
+           <table>
+               <thead style="text-align: center;">
+                  <tr>
+                     <th>Usuario</th>
+                     <th>Amigo</th>
+                     <th>Opciones</th>
+                   </tr>
+               </thead>
+               <tbody>
+                  {%for amistad in amistades%}
+                   <tr>
+                     <td>{{amistad.nombre_usuario}}</td>
+                     <td>{{amistad.nombre_amigo}}</td>
+                     <td><a href="/eliminaramistad/{{amistad.id_usuario}}/{{amistad.id_amigo}}" onclick="return confirm('Desea eliminar la amistad?')">Eliminar</a></td>
+                  </tr>
+                  {%endfor%}
+               </tbody>
+           </table>
+        </div>
+     </div>
+
+    <div class="columna2">
+      <div class="columna2_fila1 pt-3 pb-3">
+        <div class="columna2_titulo"><h2>Agregar Usuario</h2></div>
+        <br>
+         <form action="/crearusuario" method="post" onsubmit="return confirm('Desea grabar el registro del Usuario?');">
+          <div class="columna2_cuerpo">
+             <div>
+                <label for="nombre">Nombre del Usuario :</label>
+                <label for="apellido">Apellido del Usuario :</label>
+             </div>
+             <div>
+                <input type="text" name="nombre" id="nombre_usuario" required placeholder="john">
+                <input type="text" name="apellido" id="apellido_usuario" required placeholder="doe">
+            </div>
+          </div>
+          <div class="columna1_botonpanel"><button type="submmit">Agregar Usuario</button></div>
+         </form>
+      </div>
+
+      <div class="columna2_fila1 pt-3 pb-3 mt-3">
+        <div class="columna2_titulo"><h2>Crear Amistad</h2></div>
+        <br>
+         <form action="/crearamistad" method="post" onsubmit="return confirm('Desea grabar el registro de amistad?');">
+          <div class="columna2_cuerpo">
+             <div>
+                <label for="usuario">Usuario:</label>
+                <label for="amigo">Amigo:</label>
+             </div>
+             <div>
+               <select name="usuario" id="usuario" class="usuario" onchange="llenar_segundo_select()">
+                  {%for i in usuarios%}
+                   <option value="{{i.id}}">{{i.nombre + i.apellido}}</option>
+                  {%endfor%}
+               </select>
+               <select class="amigo" name="amigo" id="amigo">
+                 {%for i in usuarios%}
+                    {%if loop.index > 1%}
+                        <option value="{{i.id}}">{{i.nombre + i.apellido}}</option>
+                    {%endif%}
+                 {%endfor%}
+              </select>
+            </div>
+          </div>
+          <div class="columna1_botonpanel">
+            {%if usuarios|length > 1%}
+                  <button type="submmit">Crear</button>
+               {%else%}
+                  <button disabled type="submmit">Crear</button>
+            {%endif%}
+          </div>
+         </form>
+      </div>
+   </div>
+{%endblock%}
